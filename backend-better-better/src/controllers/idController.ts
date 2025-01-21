@@ -1,7 +1,6 @@
 import type { Request, RequestHandler, Response } from "express";
 import { idService } from "../service/idService";
 import { StatusCodes } from "http-status-codes";
-import { log } from "node:console";
 
 export const getIds = async (_req: Request, res: Response)=> {  
   try {
