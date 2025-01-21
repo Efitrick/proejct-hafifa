@@ -24,7 +24,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
-app.use(idRouter);
+app.use('/ids',idRouter);
 app.listen(8080);
 
 ConnectServer();

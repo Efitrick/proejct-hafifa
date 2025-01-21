@@ -13,8 +13,8 @@ export const getIds = async (_req: Request, res: Response)=> {
   }
 };
 export const createId = async (req: Request, res: Response)=> {  
-  try {    
-    const serviceResponse = await idService.createService(Number(req.query.identityDocument));
+  try {  
+    const serviceResponse = await idService.createService(Number(req.body.params.identityDocument));
     
     res.status(StatusCodes.OK).send(serviceResponse);  
   } catch (error) { 

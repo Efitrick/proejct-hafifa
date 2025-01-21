@@ -1,7 +1,5 @@
-import { identityNumber } from "./../../../backend/src/idModel";
 import { IdRepository } from "../Repository/idRepository";
 import { IdentityNumber } from "../entities/identityNumber.entity";
-import { log } from "node:console";
 
 export class IdService {
   private idRepository: IdRepository = new IdRepository();
@@ -14,7 +12,10 @@ export class IdService {
     }
   }
   async createService(identityDocument: number): Promise<IdentityNumber> {
-    try {
+    try {      
+      if(isNaN(identityDocument)) {
+        throw new Error();
+      }
       let sum: number = 0;
       let turn: boolean = false;
       let num: number = identityDocument;
@@ -36,15 +37,16 @@ export class IdService {
         turn = !turn; // switching from one to two multiplayer
         num = Math.floor(num / 10);
       }
+      const missingNumber = sum % 10 ? 10 - sum % 10 : 0;  // if the last digit is 0 then the result is also 0
 
       const identityNumber: IdentityNumber = {
         identityDocument: identityDocument,
-        missingNumber: 10 - (sum % 10), 
+        missingNumber: missingNumber, 
       };
 
       return await this.idRepository.create(identityNumber);
-    } catch (error) {
-      throw new Error(error);
+    } catch (error) {      
+       throw new Error(error);
     }
   }
 }
