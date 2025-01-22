@@ -8,10 +8,10 @@ export class IdentityNumber {
     uuid?: string
 
     @Column({name: 'identity_document'})
-    identityDocument: number
+    identityDocument: string
 
     @Column({name:'missing_number'})
-    missingNumber: number
+    missingNumber: string
 
     @CreateDateColumn({name:'create_date'})
     createDate?: Timestamp

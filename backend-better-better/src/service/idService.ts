@@ -11,14 +11,16 @@ export class IdService {
       throw new Error(error);
     }
   }
-  async createService(identityDocument: number): Promise<IdentityNumber> {
+  async createService(identityDocument: string): Promise<IdentityNumber> {
     try {      
-      if(isNaN(identityDocument)) {
-        throw new Error();
-      }
+      
       let sum: number = 0;
       let turn: boolean = false;
-      let num: number = identityDocument;
+      let num: number = parseInt(identityDocument);
+
+      if(isNaN(num)) {
+        throw new Error();
+      }
 
       while (num != 0) {
         let digit: number = num % 10;
@@ -37,7 +39,7 @@ export class IdService {
         turn = !turn; // switching from one to two multiplayer
         num = Math.floor(num / 10);
       }
-      const missingNumber = sum % 10 ? 10 - sum % 10 : 0;  // if the last digit is 0 then the result is also 0
+      const missingNumber:string = sum % 10 ? String(10 - sum % 10) : '0';  // if the last digit is 0 then the result is also 0
 
       const identityNumber: IdentityNumber = {
         identityDocument: identityDocument,
