@@ -4,51 +4,33 @@ import { IdentityNumber } from "../entities/identityNumber.entity";
 export class IdService {
   private idRepository: IdRepository = new IdRepository();
 
-  async findAllService(): Promise<IdentityNumber[]> {
-    try {
-      return await this.idRepository.findAll();
-    } catch (error) {
-      throw new Error(error);
-    }
-  }
   async createService(identityDocument: string): Promise<IdentityNumber> {
-    try {      
-      
+    try {
       let sum: number = 0;
-      let turn: boolean = false;
+      let multiplayer: number = 2;
       let num: number = parseInt(identityDocument);
 
-      if(isNaN(num)) {
+      if (isNaN(num)) {
         throw new Error();
       }
 
       while (num != 0) {
-        let digit: number = num % 10;
+        const digit: number = num % 10;
 
-        if (turn) {
-          sum += digit;
-        } else {
-          digit *= 2;
+        sum += (digit * multiplayer % 10) + Math.floor(digit * multiplayer / 10);
 
-          if (digit >= 10) {
-            sum += (digit % 10) + Math.floor(digit / 10); // if the digit is bigger then 10 calc the sum of digits
-          } else {
-            sum += digit;
-          }
-        }
-        turn = !turn; // switching from one to two multiplayer
+        multiplayer = multiplayer === 1 ? multiplayer = 2 : multiplayer = 1;
         num = Math.floor(num / 10);
       }
-      const missingNumber:string = sum % 10 ? String(10 - sum % 10) : '0';  // if the last digit is 0 then the result is also 0
 
       const identityNumber: IdentityNumber = {
-        identityDocument: identityDocument,
-        missingNumber: missingNumber, 
+        identityDocument,
+        missingNumber : sum % 10 ? String(10 - (sum % 10)) : "0",
       };
 
-      return await this.idRepository.create(identityNumber);
-    } catch (error) {      
-       throw new Error(error);
+      return this.idRepository.create(identityNumber);
+    } catch (error) {
+      throw new Error(error);
     }
   }
 }
